@@ -1,0 +1,11 @@
+mount /dev/vdb1 /mnt
+dd if=/dev/zero of=/swapfile bs=1k count=2048000
+mkswap /swapfile
+swapon /swapfile
+swapon -s
+echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+free -m
+docker run -d -h git.typhoon.fun --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab --volume /srv/gitlab/logs:/var/log/gitlab --volume /srv/gitlab/data:/var/opt/gitlab -p 80:80 gitlab/gitlab-ce:10.3.2-ce.0
+umount /mnt
+rm -rf .ssh/
+exit

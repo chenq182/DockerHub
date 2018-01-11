@@ -1,0 +1,18 @@
+nohup scp -r root@git.typhoon.fun:/mnt ./
+bg 1
+echo -e "set nu\nset noai nosi" > ~/.vimrc
+sed -i 's/alF/lF/' ~/.bashrc
+git config --global user.email "chenq182@sina.com"
+git config --global user.name "Quan Chen"
+docker run --name some-tomcat -v /tomcat/webapps:/usr/local/tomcat/webapps -v /tomcat/logs:/usr/local/tomcat/logs -d -p 80:8080 tomcat:9.0.2-jre8-alpine
+docker cp /etc/localtime some-tomcat:/etc/localtime
+docker run --name some-mysql -v /mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=12345@6789 -d -p 3306:3306 mysql:5.7.20 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+docker cp /etc/localtime some-mysql:/etc/localtime
+docker run --name external-phpmyadmin -d -e PMA_HOST=182.61.9.160 -p 8080:80 phpmyadmin/phpmyadmin:4.7
+docker volume create --name maven-repo
+docker run -it --rm -v maven-repo:/root/.m2 -v "$PWD":/usr/src/mymaven -w /usr/src/mymaven maven:3.5.2-jdk-8-alpine mvn package
+docker ps -a
+docker inspect -f {{.Mounts}} some-mysql
+docker volume ls --filter dangling=true|grep local|awk '{print $2}'|xargs docker volume rm
+ll /var/cache/apt/archives/
+exit
